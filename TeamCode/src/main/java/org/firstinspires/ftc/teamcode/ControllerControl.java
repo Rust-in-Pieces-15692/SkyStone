@@ -1,6 +1,6 @@
 //https://github.com/Rust-in-Pieces-15692/SkyStone/blob/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples/BasicOpMode_Linear.java
 
-package org.firstinspires.ftc.teamcode.ControllerControl;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,9 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Controller control", group="Linear Opmode")
-@Disabled
-public class BasicOpMode_Linear extends LinearOpMode {
+@TeleOp(name="TeleOp", group="")
+public class ControllerControl extends LinearOpMode {
 	private DcMotor leftDrive = null;
 	private DcMotor rightDrive = null;
 	private DcMotor middleDrive = null;
@@ -26,13 +25,26 @@ public class BasicOpMode_Linear extends LinearOpMode {
 		leftDrive.setDirection(DcMotor.Direction.FORWARD);
 		rightDrive.setDirection(DcMotor.Direction.REVERSE);
 		middleDrive.setDirection(DcMotor.Direction.FORWARD);
-		//waitForStart();
-		runtime.reset();
+		double padOneLeftStickX;
+		double padOneLeftStickY;
+		double padOneLeftTrigger;
+		double padOneRightTrigger;
+		waitForStart();
 		while (opModeIsActive()) {
-			double leftPower;
-			double rightPower;
-			double middlePower;
-			
+			padOneLeftStickY = this.gamepad1.left_stick_y;
+			padOneLeftStickX = this.gamepad1.left_stick_x;
+			//reads the left and right triggers on gamepad 1
+			padOneLeftTrigger = this.gamepad1.left_trigger;
+			padOneRightTrigger = this.gamepad1.right_trigger;
+			if (padOneLeftTrigger > 0 && padOneRightTrigger == 0){
+				middleDrive.setPower(padOneLeftTrigger);
+			} else if (padOneLeftTrigger == 0 && padOneRightTrigger > 0){
+				middleDrive.setPower(-padOneRightTrigger);
+			} else {
+				middleDrive.setPower(0);
+			}
+			leftDrive.setPower(padOneLeftStickY - padOneLeftStickX);
+			rightDrive.setPower(padOneLeftStickY + padOneLeftStickX);
 		}
 	}
 }
