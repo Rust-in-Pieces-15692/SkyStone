@@ -15,6 +15,7 @@ public class Auto_RedFoundation extends LinearOpMode{
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
     private Servo clawServo = null;
+    private double tickConstant = 12.566/1440;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -34,14 +35,25 @@ public class Auto_RedFoundation extends LinearOpMode{
     }
     private void strafe(boolean right, double speed, float distance){
         //12.566/1440 * in to give desired ticks
-
+        useEncoders();
+        int tickValue = (int) Math.floor(tickConstant*distance);
+        middleDrive.setPower(speed);
+        if (right){
+            middleDrive.setTargetPosition(tickValue);
+        } else {
+            middleDrive.setTargetPosition(-tickValue);
+        }
+        while (middleDrive.isBusy()) {
+            continue;
+        }
+        middleDrive.setPower(0);
     }
     private void drive(boolean forward, double speed, float distance){
         //12.566/1440 * in to give desired ticks
 
     }
     private void turn(boolean right, double speed, int degrees){
-        
+
     }
     private void resetEncoders(){
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -50,5 +62,10 @@ public class Auto_RedFoundation extends LinearOpMode{
         leftDrive.setPower(0);
         rightDrive.setPower(0);
         middleDrive.setPower(0);
+    }
+    private void useEncoders(){
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }
