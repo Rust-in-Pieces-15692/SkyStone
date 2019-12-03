@@ -16,7 +16,7 @@ public class Auto_RedFoundationPark extends LinearOpMode{
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
     private Servo clawServo = null;
-    private double tickConstant = 12.566/1440;
+    private double tickConstant = 12.566/1440*1.5;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -33,7 +33,7 @@ public class Auto_RedFoundationPark extends LinearOpMode{
         waitForStart();
         while (opModeIsActive()) {
             if (mode == 0){
-                strafe(false,0.8,68);
+                strafe(false,0.8,46);
                 mode = 1;
             }
             if (mode == 1){
@@ -41,7 +41,7 @@ public class Auto_RedFoundationPark extends LinearOpMode{
                 mode = 2;
             }
             if (mode == 2){
-                strafe(true,0.8,68);
+                strafe(true,0.8,46);
                 mode = 3;
             }
             if (mode == 3){
@@ -49,7 +49,7 @@ public class Auto_RedFoundationPark extends LinearOpMode{
                 mode = 4;
             }
             if (mode == 4){
-                drive(false,1,50);
+                drive(false,1,26);
             }
         }
     }
