@@ -1,4 +1,4 @@
-//Red side, move foundation and park
+//Blue Side, move foundation and park
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="Blue Foundation/Park", group="Blue")
+@Autonomous(name="Blue Foundation/Park outside", group="Blue")
 public class Auto_BlueFoundationPark extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
@@ -37,7 +37,7 @@ public class Auto_BlueFoundationPark extends LinearOpMode{
                 mode = 2;
             }
             if (mode == 2){
-                strafe(false,0.8,66);
+                strafe(false,0.8,68);
                 mode = 3;
             }
             if (mode == 3){
