@@ -1,5 +1,4 @@
 //Blue Side, move foundation and park
-//Setup AS Git
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
