@@ -16,6 +16,7 @@ public class Auto_RedDoubleSkySyone extends LinearOpMode{
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
     private Servo clawServo = null;
+    private ColorSensor colorSensor = null;
     private double tickConstant = (12.566/1440)*1.5;
     private int stonesCollected = 0;
     private int movedLeft = 0;
@@ -46,7 +47,7 @@ public class Auto_RedDoubleSkySyone extends LinearOpMode{
                 mode = 1;
               } else {
                 //check the next one
-                strafe(left,0.7,1);
+                strafe(false,0.7,1);
               }
               break;
             case 1:
@@ -64,9 +65,9 @@ public class Auto_RedDoubleSkySyone extends LinearOpMode{
             case 2:
               drive(false, 0.7, 28);
               turn(true,0.7,90);
-              drive(true,0.7,44+driveLeft);
+              drive(true,0.7,44+movedLeft);
               //drop it 
-              drive(false,0.7,(44+(driveLeft*2)));
+              drive(false,0.7,(44+(movedLeft*2)));
           }
         }
     }
