@@ -69,6 +69,9 @@ public class Auto_BlueFoundationPark extends LinearOpMode{
         //12.566/1440 * in to give desired ticks
         useEncoders();
         int tickValue = (int) Math.floor(tickConstant*distance);
+        if (!forward){
+            tickValue *= -1;
+        }
         leftDrive.setPower(speed);
         rightDrive.setPower(speed);
         leftDrive.setTargetPosition(tickValue);
