@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -15,7 +16,7 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
     private Servo clawServo = null;
-    private double tickConstant = 12.566/1440;
+    private double tickConstant = (12.566/1440)*1.5;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -23,7 +24,8 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         middleDrive = hardwareMap.get(DcMotor.class, "middle_drive");
-        clawServo = hardwareMap.get(Servo.class,"claw_servo");
+        clawServo = hardwareMap.get(Servo.class, "claw_servo");
+        colorSensor = hardwareMap.get(ColorSensor.class, "color_sensor");
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         middleDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -33,23 +35,18 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
         while (opModeIsActive()) {
           switch (mode) {
             case 0:
-              drive(true,1,50);
-              mode = 1;
+              if (colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) {
+                //Dude, that's a SkyStone!
+                //go get it
+                mode = 1;
+              } else {
+                //check the next one
+                strafe(left,1,50);
+              }
               break;
             case 1:
-              //grab block
-              mode = 2;
+              //run away with the stone!
               break;
-            case 2:
-              strafe(true,1,50);
-              mode = 3;
-              break;
-            case 3:
-              turn(true,1,180);
-              mode = 4;
-              break;
-              
-            //do the rest
           }
         }
     }
