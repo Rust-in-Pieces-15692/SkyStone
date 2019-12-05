@@ -10,13 +10,15 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="Red Double SkyStone", group="Red")
-public class Auto_RedDoubleSkyStone extends LinearOpMode{
+@Autonomous(name="Red Double SkySyone", group="Red")
+public class Auto_RedDoubleSkySyone extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
     private Servo clawServo = null;
     private double tickConstant = (12.566/1440)*1.5;
+    private int stonesCollected = 0;
+    private int movedLeft = 0;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -34,6 +36,9 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
         waitForStart();
         while (opModeIsActive()) {
           switch (mode) {
+            case -1:
+              drive(true,0.7,20);
+              mode = 0;
             case 0:
               if (colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) {
                 //Dude, that's a SkyStone!
@@ -41,12 +46,27 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
                 mode = 1;
               } else {
                 //check the next one
-                strafe(left,1,50);
+                strafe(left,0.7,1);
               }
               break;
             case 1:
-              //run away with the stone!
+              strafe(false,0.7,1);
+              movedLeft++;
+              if (colorSensor.red() < 20 && colorSensor.green() < 20 && colorSensor.blue() < 20) {
+                //This is the one!
+                movedLeft -= 9;
+                strafe(true,0.7,9);
+                drive(true,0.7,8);
+                //grab it
+              }
+              mode = 2;
               break;
+            case 2:
+              drive(false, 0.7, 28);
+              turn(true,0.7,90);
+              drive(true,0.7,44+driveLeft);
+              //drop it 
+              drive(false,0.7,(44+(driveLeft*2)));
           }
         }
     }
@@ -70,6 +90,9 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
         //12.566/1440 * in to give desired ticks
         useEncoders();
         int tickValue = (int) Math.floor(tickConstant*distance);
+        if (!forward){
+          tickValue *= -1;
+        }
         leftDrive.setPower(speed);
         rightDrive.setPower(speed);
         leftDrive.setTargetPosition(tickValue);
