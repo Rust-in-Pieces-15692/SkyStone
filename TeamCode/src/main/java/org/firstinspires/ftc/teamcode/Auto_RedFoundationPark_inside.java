@@ -58,14 +58,16 @@ public class Auto_RedFoundationPark_inside extends LinearOpMode{
     }
     private void strafe(boolean right, double speed, float distance){
         //12.566/1440 * in to give desired ticks
-        useEncoders();
+
         int tickValue = (int) Math.floor(tickConstant*distance);
-        middleDrive.setPower(speed);
+
         if (right){
             middleDrive.setTargetPosition(tickValue);
         } else {
             middleDrive.setTargetPosition(-tickValue);
         }
+        useEncoders();
+        middleDrive.setPower(speed);
         while (middleDrive.isBusy()) {
             continue;
         }
@@ -102,7 +104,6 @@ public class Auto_RedFoundationPark_inside extends LinearOpMode{
         middleDrive.setPower(0);
     }
     private void useEncoders(){
-        resetEncoders();
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
