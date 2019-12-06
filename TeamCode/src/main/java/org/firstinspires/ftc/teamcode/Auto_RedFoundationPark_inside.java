@@ -1,4 +1,4 @@
-//Red side, move foundation and park inside
+//Red side, move foundation and park
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -25,9 +25,6 @@ public class Auto_RedFoundationPark_inside extends LinearOpMode{
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         middleDrive = hardwareMap.get(DcMotor.class, "middle_drive");
         clawServo = hardwareMap.get(Servo.class,"claw_servo");
-        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        middleDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
         middleDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -75,10 +72,10 @@ public class Auto_RedFoundationPark_inside extends LinearOpMode{
             }
         }
     }
-    private void strafe(boolean left, double speed, float distance){
+    private void strafe(boolean right, double speed, float distance){
         //12.566/1440 * in to give desired ticks
         int tickValue = (int)(tickConstant*distance);
-        if (left){
+        if (right){
             middleDrive.setTargetPosition(tickValue);
         } else {
             middleDrive.setTargetPosition(-tickValue);
