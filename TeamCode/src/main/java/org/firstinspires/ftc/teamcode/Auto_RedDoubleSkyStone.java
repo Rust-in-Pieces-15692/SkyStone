@@ -2,13 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 @Autonomous(name="Red Double SkyStone", group="Red")
 public class Auto_RedDoubleSkyStone extends LinearOpMode{
@@ -33,42 +31,61 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         middleDrive.setDirection(DcMotor.Direction.FORWARD);
         int servoLocation = 0;
-        int mode = 0;
+        int mode = -1;
         waitForStart();
         while (opModeIsActive()) {
-          switch (mode) {
-            case -1:
-              drive(true,0.7,20);
-              mode = 0;
-            case 0:
-              if (colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) {
-                //Dude, that's a SkyStone!
-                //go get it
-                mode = 1;
-              } else {
-                //check the next one
-                strafe(false,0.7,1);
-              }
-              break;
-            case 1:
-              strafe(false,0.7,1);
-              movedLeft++;
-              if (colorSensor.red() < 20 && colorSensor.green() < 20 && colorSensor.blue() < 20) {
-                //This is the one!
-                movedLeft -= 9;
-                strafe(true,0.7,9);
-                drive(true,0.7,8);
-                //grab it
-              }
-              mode = 2;
-              break;
-            case 2:
-              drive(false, 0.7, 28);
-              turn(true,0.7,90);
-              drive(true,0.7,44+movedLeft);
-              //drop it 
-              drive(false,0.7,(44+(movedLeft*2)));
-          }
+            switch (mode) {
+                case -1:
+                    drive(true,0.7,20);
+                    mode = 0;
+                case 0:
+                    if (colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) {
+                        //Dude, that's a SkyStone!
+                        //go get it
+                        mode = 1;
+                    } else {
+                        //check the next one
+                        strafe(false,0.7,1);
+                    }
+                    break;
+                case 1:
+                    strafe(false,0.7,1);
+                    movedLeft++;
+                    if (colorSensor.red() < 20 && colorSensor.green() < 20 && colorSensor.blue() < 20) {
+                        //This is the one!
+                        movedLeft -= 9;
+                        strafe(true, 0.7, 9);
+                        drive(true, 0.7, 8);
+                        //grab it
+                        mode = 2;
+                    } else if(colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) {
+                        //Alright, not it
+                        mode = 0;
+                    } else {
+                        //Bruh, what the heck is this then?
+                        mode = 0;
+                    }
+                    break;
+                case 2:
+                    drive(false, 0.7, 28);
+                    turn(true,0.7,90);
+                    drive(true,0.7,44+movedLeft);
+                    //drop it
+                    drive(false,0.7,(44+(movedLeft*2))); //Go back and get the other!
+                    turn(false,0.7,90);
+                    drive(true,0.7,28);
+                    //grab it
+                    drive(false, 0.7, 28);
+                    turn(true,0.7,90);
+                    drive(true,0.7,44+movedLeft);
+                    //drop it
+                    mode = 3;
+                    break;
+                case 3:
+                    //go back to center (6' from bottom)
+                    drive(false,0.7,(float)33.5);
+                    //we're parked now.
+            }
         }
     }
     private void strafe(boolean right, double speed, float distance){
