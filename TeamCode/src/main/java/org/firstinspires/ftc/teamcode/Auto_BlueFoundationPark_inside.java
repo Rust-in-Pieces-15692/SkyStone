@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="Blue Foundation/Park Inside", group="Red")
+@Autonomous(name="Blue Foundation/Park Inside", group="Blue")
 public class Auto_BlueFoundationPark_inside extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;

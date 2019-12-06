@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="Red Double SkySyone", group="Red")
-public class Auto_RedDoubleSkySyone extends LinearOpMode{
+@Autonomous(name="Red Double SkyStone", group="Red")
+public class Auto_RedDoubleSkyStone extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
