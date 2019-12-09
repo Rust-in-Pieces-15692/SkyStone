@@ -48,6 +48,8 @@ public class Auto_RedFoundationPark extends LinearOpMode{
             }
             if (mode == 1){
                 drive(true,1,12)
+                telemetry.addData("Mode", "1");
+                telemetry.update();
             }
         }
             
