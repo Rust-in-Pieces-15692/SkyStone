@@ -41,13 +41,13 @@ public class Auto_InsidePark extends LinearOpMode{
         waitForStart();
         while (opModeIsActive()) {
             if (mode == 0){
-                strafe(true,0.8,60);
+                strafe(true,0.8,32);
                 mode = 1;
                 telemetry.addData("Mode", "0");
                 telemetry.update();
             }
             if (mode == 1){
-                drive(true,1,12)
+                drive(true,0.8,25)
                 mode = 2;
                 telemetry.addData("Mode", "1");
                 telemetry.update();
