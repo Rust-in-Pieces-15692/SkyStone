@@ -37,7 +37,7 @@ public class Auto_OutsidePark extends LinearOpMode{
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         int servoLocation = 0;
-        int mode = 0;
+        int mode = 1;
         waitForStart();
         while (opModeIsActive()) {
             if (mode == 0){
@@ -47,7 +47,7 @@ public class Auto_OutsidePark extends LinearOpMode{
                 telemetry.update();
             }
             if (mode == 1){
-                drive(true,1,12)
+                drive(true,0.8,25);
                 mode = 2;
                 telemetry.addData("Mode", "1");
                 telemetry.update();
