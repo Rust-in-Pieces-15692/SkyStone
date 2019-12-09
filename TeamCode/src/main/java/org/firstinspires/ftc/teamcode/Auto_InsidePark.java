@@ -47,7 +47,7 @@ public class Auto_InsidePark extends LinearOpMode{
                 telemetry.update();
             }
             if (mode == 1){
-                drive(true,0.8,25)
+                drive(true,0.8,25);
                 mode = 2;
                 telemetry.addData("Mode", "1");
                 telemetry.update();
