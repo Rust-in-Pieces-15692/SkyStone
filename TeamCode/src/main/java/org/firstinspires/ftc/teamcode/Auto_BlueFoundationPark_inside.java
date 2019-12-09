@@ -17,6 +17,7 @@ public class Auto_BlueFoundationPark_inside extends LinearOpMode{
     private DcMotor middleDrive = null;
     private Servo clawServo = null;
     private double tickConstant = 172; //1440/12.556*1.5
+    private double strafeConstant = ((1440*(2/3))/12.566);
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -77,7 +78,7 @@ public class Auto_BlueFoundationPark_inside extends LinearOpMode{
     }
     private void strafe(boolean left, double speed, float distance){
         //12.566/1440 * in to give desired ticks
-        int tickValue = (int)(tickConstant*distance);
+        int tickValue = (int)(strafeConstant*distance);
         if (left){
             middleDrive.setTargetPosition(tickValue);
         } else {
