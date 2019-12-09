@@ -16,6 +16,7 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
     private Servo clawServo = null;
     private ColorSensor colorSensor = null;
     private double tickConstant = (12.566/1440)*1.5;
+    private double strafeConstant = ((1440*(2/3))/12.566);
     private int stonesCollected = 0;
     private int movedLeft = 0;
     @Override
@@ -91,7 +92,7 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
     private void strafe(boolean right, double speed, float distance){
         //12.566/1440 * in to give desired ticks
         useEncoders();
-        int tickValue = (int) Math.floor(tickConstant*distance);
+        int tickValue = (int) Math.floor(strafeConstant*distance);
         middleDrive.setPower(speed);
         if (right){
             middleDrive.setTargetPosition(tickValue);
