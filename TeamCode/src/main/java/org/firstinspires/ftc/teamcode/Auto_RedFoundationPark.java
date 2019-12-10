@@ -6,20 +6,21 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
 
 @Autonomous(name="Red Foundation/Park Outside", group="Red")
 public class Auto_RedFoundationPark extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
-    private DcMotor xClawDrive = null;
+    private DcMotorSimple foundationDrive = null;
     private Servo clawServo = null;
     private double tickConstant = 172; //1440/12.556*1.5
     private double strafeConstant = ((1440*(2/3))/12.566);
-    private float rackandpinRadius = 25;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -27,24 +28,22 @@ public class Auto_RedFoundationPark extends LinearOpMode{
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         middleDrive = hardwareMap.get(DcMotor.class, "middle_drive");
-        xClawDrive = hardwareMap.get(DcMotor.class, "xclaw_drive" );
+        foundationDrive = hardwareMap.get(.class, "xclaw_drive" );
         clawServo = hardwareMap.get(Servo.class,"claw_servo");
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
         middleDrive.setDirection(DcMotor.Direction.FORWARD);
-        xClawDrive.setDirection(DcMotor.Direction.FORWARD);
+        foundationDrive.setDirection(DcMotor.Direction.FORWARD);
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         middleDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        xClawDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setTargetPosition(0);
         rightDrive.setTargetPosition(0);
         middleDrive.setTargetPosition(0);
-        xClawDrive.setTargetPosition(0);
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        xClawDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        private ElapsedTime     runtime = new ElapsedTime();
 
         int servoLocation = 0;
         int mode = 0;
@@ -59,10 +58,7 @@ public class Auto_RedFoundationPark extends LinearOpMode{
             if (mode == 1){
                 telemetry.addData("Mode", "1");
                 telemetry.update();
-                //Grab foundation
-                clawServo.setPosition(180);
-                rackandpin(true,0.5,1);
-                clawServo.setPosition(20);
+                rackandpin(false, 0.5, 1 );
                 mode = 2;
             }
             if (mode == 2){
@@ -74,9 +70,7 @@ public class Auto_RedFoundationPark extends LinearOpMode{
             if (mode == 3){
                 telemetry.addData("Mode", "3");
                 telemetry.update();
-                clawServo.setPosition(180);
-                rackandpin(false,0.5,1);
-                clawServo.setPosition(0);
+                rackandpin(true, 0.5, 1);
                 mode = 4;
             }
             if (mode == 4){
@@ -105,22 +99,17 @@ public class Auto_RedFoundationPark extends LinearOpMode{
         middleDrive.setPower(0);
         resetEncoders();
     }
-    private void rackandpin(boolean outward, double speed, float distance){
-        float tickValue = (float) (distance/(2*3.1415*tickConstant));
-        if(outward){
-            xClawDrive.setTargetPosition(tickValue);
-        }else{
-            xClawDrive.setTargetPosition(-tickValue);
+    private void rackandpin(boolean upward, double speed, float time){
+        runtime.reset();
+        if(upward) {
+            foundationDrive.setPower(speed);
+        }else {
+            foundationDrive.setPower(-speed);
         }
-        xClawDrive.setPower(speed);
-        while (xClawDrive.isBusy()) {
-            telemetry.addData("Tick Counter", tickValue);
-            telemetry.addData("Current Position", xClawDrive.getCurrentPosition());
-            telemetry.update();
+        while (opModeIsActive() && (runtime.seconds() < time)) {
+            continue;
         }
-        xClawDrive.setPower(0);
-        resetEncoders();
-
+        foundationDrive.setPower(0);
     }
 
     private void drive(boolean forward, double speed, float distance){
@@ -153,10 +142,9 @@ public class Auto_RedFoundationPark extends LinearOpMode{
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         middleDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        xClawDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        xClawDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
     }
 }
