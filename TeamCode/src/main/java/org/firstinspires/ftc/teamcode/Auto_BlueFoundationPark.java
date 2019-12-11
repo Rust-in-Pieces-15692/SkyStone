@@ -16,6 +16,7 @@ public class Auto_BlueFoundationPark extends LinearOpMode{
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
     private Servo clawServo = null;
+    private Servo foundationServo = null;
     private double tickConstant = 172; //1440/12.556*1.5
     private double strafeConstant = ((1440*(2/3))/12.566);
     @Override
@@ -26,6 +27,7 @@ public class Auto_BlueFoundationPark extends LinearOpMode{
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         middleDrive = hardwareMap.get(DcMotor.class, "middle_drive");
         clawServo = hardwareMap.get(Servo.class,"claw_servo");
+        foundationServo = hardwareMap.get(Servo.class, "foundation_servo" );
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
         middleDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -43,7 +45,7 @@ public class Auto_BlueFoundationPark extends LinearOpMode{
         waitForStart();
         while (opModeIsActive()) {
             if (mode == 0){
-                strafe(false,0.8,60);
+                strafe(true,0.8,60);
                 mode = 1;
                 telemetry.addData("Mode", "0");
                 telemetry.update();
@@ -51,27 +53,27 @@ public class Auto_BlueFoundationPark extends LinearOpMode{
             if (mode == 1){
                 telemetry.addData("Mode", "1");
                 telemetry.update();
-                //Grab foundation
+                rackandpin(false);
                 mode = 2;
             }
             if (mode == 2){
                 telemetry.addData("Mode", "2");
                 telemetry.update();
-                strafe(true,0.8,60);
+                strafe(false,0.8,60);
                 mode = 3;
             }
             if (mode == 3){
                 telemetry.addData("Mode", "3");
                 telemetry.update();
-                //drop foundation
+                rackandpin(true);
                 mode = 4;
             }
             if (mode == 4){
                 telemetry.addData("Mode", "4");
                 telemetry.update();
-                strafe(false, 0.8, 0);
+                strafe(true, 0.8, 0);
                 mode = 5;
-                drive(false,1,12);
+                drive(true,1,12);
             }
         }
     }
@@ -114,6 +116,13 @@ public class Auto_BlueFoundationPark extends LinearOpMode{
         leftDrive.setPower(0);
         rightDrive.setPower(0);
         resetEncoders();
+    }
+    private void rackandpin(boolean upward){
+        if(upward){
+            foundationServo.setPosition(180);
+        }else{
+            foundationServo.setPosition(0);
+        }
     }
     private void turn(boolean right, double speed, int degrees){
         //Will add when access to field

@@ -47,7 +47,7 @@ public class Auto_RedFoundationPark extends LinearOpMode{
         waitForStart();
         while (opModeIsActive()) {
             if (mode == 0){
-                strafe(true,0.8,60);
+                strafe(false,0.8,60);
                 mode = 1;
                 telemetry.addData("Mode", "0");
                 telemetry.update();
@@ -61,7 +61,7 @@ public class Auto_RedFoundationPark extends LinearOpMode{
             if (mode == 2){
                 telemetry.addData("Mode", "2");
                 telemetry.update();
-                strafe(false,0.8,60);
+                strafe(true,0.8,60);
                 mode = 3;
             }
             if (mode == 3){
@@ -73,9 +73,9 @@ public class Auto_RedFoundationPark extends LinearOpMode{
             if (mode == 4){
                 telemetry.addData("Mode", "4");
                 telemetry.update();
-                strafe(true, 0.8, 0);
+                strafe(false, 0.8, 0);
                 mode = 5;
-                drive(false,1,12);
+                drive(true,1,12);
             }
         }
     }
