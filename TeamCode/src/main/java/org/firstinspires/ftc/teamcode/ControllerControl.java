@@ -39,7 +39,7 @@ public class ControllerControl extends LinearOpMode {
 		double padOneRightTrigger;
 		double padOneRightStickY;
 		int servoLocation = 0;
-		int servoLocation1 = 0;
+		int servoLocation1 = 180;
 
 
 		;

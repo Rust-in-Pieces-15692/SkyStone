@@ -40,11 +40,12 @@ public class Auto_BlueFoundationPark extends LinearOpMode{
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        int servoLocation = 0;
+        int servoLocation = 180;
         int mode = 0;
         waitForStart();
         while (opModeIsActive()) {
             if (mode == 0){
+                foundationServo.setPosition(180);
                 strafe(true,0.8,60);
                 mode = 1;
                 telemetry.addData("Mode", "0");
@@ -119,9 +120,9 @@ public class Auto_BlueFoundationPark extends LinearOpMode{
     }
     private void rackandpin(boolean upward){
         if(upward){
-            foundationServo.setPosition(180);
-        }else{
             foundationServo.setPosition(0);
+        }else{
+            foundationServo.setPosition(180);
         }
     }
     private void turn(boolean right, double speed, int degrees){
