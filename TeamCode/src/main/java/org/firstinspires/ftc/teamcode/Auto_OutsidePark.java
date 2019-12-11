@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.rdobotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -24,7 +24,7 @@ public class Auto_OutsidePark extends LinearOpMode{
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         middleDrive = hardwareMap.get(DcMotor.class, "middle_drive");
-        clawServo = hardwareMap.get(Servo.class,"claw_servo");
+        clawServo = hardwareMap.get(Servo.class, "claw_servo");
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
         middleDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -41,21 +41,21 @@ public class Auto_OutsidePark extends LinearOpMode{
         int mode = 1;
         waitForStart();
         while (opModeIsActive()) {
-            if (mode == 0){
-                strafe(true,0.8,60);
+            if (mode == 0) {
+                strafe(false, 0.8, 60);
                 mode = 1;
                 telemetry.addData("Mode", "0");
                 telemetry.update();
             }
-            if (mode == 1){
-                drive(true,0.8,25);
+            if (mode == 1) {
+                drive(false, 0.8, 25);
                 mode = 2;
                 telemetry.addData("Mode", "1");
                 telemetry.update();
             }
         }
-            
 
+    }
     private void strafe(boolean left, double speed, float distance){
         //12.566/1440 * in to give desired ticks
         int tickValue = (int)(strafeConstant*distance);
