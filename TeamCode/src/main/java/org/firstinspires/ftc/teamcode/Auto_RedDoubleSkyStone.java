@@ -31,25 +31,35 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         middleDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        middleDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setTargetPosition(0);
+        rightDrive.setTargetPosition(0);
+        middleDrive.setTargetPosition(0);
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         int servoLocation = 0;
-        int mode = -1;
+        int mode = 0;
         waitForStart();
         while (opModeIsActive()) {
             switch (mode) {
-                case -1:
-                    drive(true,0.7,20);
-                    mode = 0;
                 case 0:
+                    drive(true,0.7,20);
+                    mode = 1;
+                    break;
+                case 1:
                     if ((colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) || (colorSensor.red() < 20 && colorSensor.green() < 20 && colorSensor.blue() < 20)) {
                         //Dude, that's a SkyStone!
                         //go get it
-                        mode = 1;
+                        mode = 2;
                     } else {
                         //check the next one
                         strafe(false,0.7,((float)0.5));
                     }
                     break;
-                case 1:
+                case 2:
                     strafe(false,0.7,1);
                     movedLeft++;
                     if (colorSensor.red() < 20 && colorSensor.green() < 20 && colorSensor.blue() < 20) {
@@ -59,37 +69,44 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
                         drive(true, 0.7, 8);
                         //grab it
                         clawServo.setPosition(180);
-                        mode = 2;
+                        drive(false,0.7,3);
+                        mode = 3;
                     } else if(colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) {
                         //Alright, not it
-                        mode = 0;
+                        mode = 1;
                     } else {
                         //Bruh, what the heck is this then?
-                        mode = 0;
+                        mode = 1;
                     }
                     break;
-                case 2:
+                case 3:
                     drive(false, 0.7, 28);
                     //turn(true,0.7,90);
                     strafe(false,0.7,44+movedLeft);
                     //drop it
                     clawServo.setPosition(0);
                     strafe(true,0.7,(44+(movedLeft*2))); //Go back and get the other!
+                    drive(true,0.7,3);
                     //turn(false,0.7,90);
                     drive(true,0.7,28);
                     //grab it
                     clawServo.setPosition(180);
+                    drive(false,0.7,3);
                     drive(false, 0.7, 28);
                     //turn(true,0.7,90);
                     strafe(false,0.7,44+movedLeft);
                     //drop it
                     clawServo.setPosition(0);
-                    mode = 3;
+                    mode = 4;
                     break;
-                case 3:
+                case 4:
                     //go back to center (6' from bottom)
                     strafe(true,0.7,(float)33.5);
                     //we're parked now.
+                    mode = 5;
+                    break;
+                case 5:
+                    break;
             }
         }
     }

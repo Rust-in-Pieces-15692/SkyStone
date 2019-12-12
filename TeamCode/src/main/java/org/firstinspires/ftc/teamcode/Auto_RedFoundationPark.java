@@ -41,7 +41,6 @@ public class Auto_RedFoundationPark extends LinearOpMode{
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         int servoLocation = 0;
         int mode = 0;
         waitForStart();
