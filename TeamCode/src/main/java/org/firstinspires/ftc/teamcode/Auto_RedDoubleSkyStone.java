@@ -58,6 +58,7 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
                         strafe(true, 0.7, 9);
                         drive(true, 0.7, 8);
                         //grab it
+                        clawServo.setPosition(180);
                         mode = 2;
                     } else if(colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) {
                         //Alright, not it
@@ -72,14 +73,17 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
                     //turn(true,0.7,90);
                     strafe(false,0.7,44+movedLeft);
                     //drop it
+                    clawServo.setPosition(0);
                     strafe(true,0.7,(44+(movedLeft*2))); //Go back and get the other!
                     //turn(false,0.7,90);
                     drive(true,0.7,28);
                     //grab it
+                    clawServo.setPosition(180);
                     drive(false, 0.7, 28);
                     //turn(true,0.7,90);
                     strafe(false,0.7,44+movedLeft);
                     //drop it
+                    clawServo.setPosition(0);
                     mode = 3;
                     break;
                 case 3:
