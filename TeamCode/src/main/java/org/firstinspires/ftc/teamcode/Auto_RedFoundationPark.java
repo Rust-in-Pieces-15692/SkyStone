@@ -18,8 +18,9 @@ public class Auto_RedFoundationPark extends LinearOpMode{
     private DcMotor middleDrive = null;
     private Servo foundationServo = null;
     private Servo clawServo = null;
-    private double tickConstant = 172; //1440/12.556*1.5
-    private double strafeConstant = ((1440*(2/3))/12.566);
+    private ElapsedTime runtime = new ElapsedTime();
+    private double tickConstant = 79;
+    private double strafeConstant = 185;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -47,35 +48,22 @@ public class Auto_RedFoundationPark extends LinearOpMode{
         while (opModeIsActive()) {
             if (mode == 0){
                 foundationServo.setPosition(180);
-                strafe(false,0.8,60);
+                strafe(true,0.8,18);
+                drive(false, 0.6, 17);
+                drive(false, 0.3, 7);
+                rackandpin(false);
+                drive(true,0.5,27);
+                rackandpin(true);
+                strafe(false,0.8,35);
+                drive(false,0.8,24);
+                strafe(false,0.8,23);
                 mode = 1;
                 telemetry.addData("Mode", "0");
                 telemetry.update();
             }
-            if (mode == 1){
-                telemetry.addData("Mode", "1");
+            else {
+                telemetry.addData("Mode", "Done");
                 telemetry.update();
-                rackandpin(false);
-                mode = 2;
-            }
-            if (mode == 2){
-                telemetry.addData("Mode", "2");
-                telemetry.update();
-                strafe(true,0.8,60);
-                mode = 3;
-            }
-            if (mode == 3){
-                telemetry.addData("Mode", "3");
-                telemetry.update();
-                rackandpin(true);
-                mode = 4;
-            }
-            if (mode == 4){
-                telemetry.addData("Mode", "4");
-                telemetry.update();
-                strafe(false, 0.8, 0);
-                mode = 5;
-                drive(true,1,12);
             }
         }
     }
@@ -97,10 +85,14 @@ public class Auto_RedFoundationPark extends LinearOpMode{
         resetEncoders();
     }
     private void rackandpin(boolean upward){
+      runtime.reset();
       if(upward){
-          foundationServo.setPosition(0);
-      }else{
           foundationServo.setPosition(180);
+      }else{
+          foundationServo.setPosition(0);
+      }
+      while (runtime.seconds() < 3) {
+          continue;
       }
     }
 
