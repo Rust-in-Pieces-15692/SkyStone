@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @Autonomous(name="Park Outside", group="Red")
-public class Auto_OutsidePark extends LinearOpMode{
+public class Auto_RedOutsidePark extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
@@ -43,7 +43,7 @@ public class Auto_OutsidePark extends LinearOpMode{
         while (opModeIsActive()) {
             if (mode == 0) {
                 strafe(false, 0.8, 60);
-                drive(false,speed,0.5,48);
+                drive(false,0.5,48);
                 mode = 1;
                 telemetry.addData("Mode", "0");
                 telemetry.update();
