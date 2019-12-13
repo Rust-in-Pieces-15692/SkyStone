@@ -13,10 +13,12 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
+    private DcMotor clawDrive = null;
     private Servo clawServo = null;
     private ColorSensor colorSensor = null;
-    private double tickConstant = (12.566/1440)*1.5;
-    private double strafeConstant = ((1440*(2/3))/12.566);
+    private ElapsedTime runtime = new ElapsedTime();
+    private double tickConstant = 76;
+    private double strafeConstant = 229;
     private int stonesCollected = 0;
     private int movedLeft = 0;
     @Override
@@ -26,6 +28,7 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         middleDrive = hardwareMap.get(DcMotor.class, "middle_drive");
+        clawDrive = hardwareMap.get(DcMotor.class, "claw_drive");
         clawServo = hardwareMap.get(Servo.class, "claw_servo");
         colorSensor = hardwareMap.get(ColorSensor.class, "color_sensor");
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -46,11 +49,16 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
         while (opModeIsActive()) {
             switch (mode) {
                 case 0:
+                    runtime.reset();
+                    clawServo.setPosition(0);
+                    while (runtime.seconds() < 3) {
+                        continue;
+                    }
                     drive(true,0.7,20);
                     mode = 1;
                     break;
                 case 1:
-                    if ((colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) || (colorSensor.red() < 20 && colorSensor.green() < 20 && colorSensor.blue() < 20)) {
+                    if ((colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) || (colorSensor.red() < 100 && colorSensor.green() < 100 && colorSensor.blue() < 100)) {
                         //Dude, that's a SkyStone!
                         //go get it
                         mode = 2;
@@ -62,13 +70,19 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
                 case 2:
                     strafe(false,0.7,1);
                     movedLeft++;
-                    if (colorSensor.red() < 20 && colorSensor.green() < 20 && colorSensor.blue() < 20) {
+                    if (colorSensor.red() < 100 && colorSensor.green() < 100 && colorSensor.blue() < 100) {
                         //This is the one!
                         movedLeft -= 9;
                         strafe(true, 0.7, 9);
                         drive(true, 0.7, 8);
                         //grab it
+                        clawMove(true,0.7,6);
+                        runtime.reset();
                         clawServo.setPosition(180);
+                        while (runtime.seconds() < 3) {
+                            continue;
+                        }
+                        clawMove(false,0.7,6);
                         drive(false,0.7,3);
                         mode = 3;
                     } else if(colorSensor.red() > colorSensor.blue() && colorSensor.green() > colorSensor.blue()) {
@@ -84,19 +98,31 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
                     //turn(true,0.7,90);
                     strafe(false,0.7,44+movedLeft);
                     //drop it
+                    runtime.reset();
                     clawServo.setPosition(0);
+                    while (runtime.seconds() < 3) {
+                        continue;
+                    }
                     strafe(true,0.7,(44+(movedLeft*2))); //Go back and get the other!
                     drive(true,0.7,3);
                     //turn(false,0.7,90);
                     drive(true,0.7,28);
                     //grab it
+                    runtime.reset();
                     clawServo.setPosition(180);
+                    while (runtime.seconds() < 3) {
+                        continue;
+                    }
                     drive(false,0.7,3);
                     drive(false, 0.7, 28);
                     //turn(true,0.7,90);
                     strafe(false,0.7,44+movedLeft);
                     //drop it
+                    runtime.reset();
                     clawServo.setPosition(0);
+                    while (runtime.seconds() < 3) {
+                        continue;
+                    }
                     mode = 4;
                     break;
                 case 4:
@@ -125,6 +151,23 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
             telemetry.update();
         }
         middleDrive.setPower(0);
+        resetEncoders();
+    }
+    private void clawMove(boolean up, double speed, float ticks){
+        //12.566/1440 * in to give desired ticks
+        int tickValue = (int)(ticks);
+        if (up){
+            clawDrive.setTargetPosition(tickValue);
+        } else {
+            clawDrive.setTargetPosition(-tickValue);
+        }
+        clawDrive.setPower(speed);
+        while (clawDrive.isBusy()) {
+            telemetry.addData("Tick Counter", tickValue);
+            telemetry.addData("Current Position", clawDrive.getCurrentPosition());
+            telemetry.update();
+        }
+        clawDrive.setPower(0);
         resetEncoders();
     }
     private void drive(boolean forward, double speed, float distance){
@@ -157,8 +200,10 @@ public class Auto_RedDoubleSkyStone extends LinearOpMode{
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         middleDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        clawDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        clawDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }
