@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+@Disabled
 @Autonomous(name="Red Double SkyStone", group="Red")
 public class Auto_RedDoubleSkyStone extends LinearOpMode{
     private DcMotor leftDrive = null;

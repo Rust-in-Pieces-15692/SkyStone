@@ -2,21 +2,17 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="Park Outside", group="Red")
-public class Auto_RedOutsidePark extends LinearOpMode{
+@Autonomous(name="Blue Park Inside Depo", group="Blue")
+public class Auto_BlueInsideParkFoundation extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
     private Servo clawServo = null;
-    private double tickConstant = 172; //1440/12.556*1.5
-    private double strafeConstant = ((1440*(2/3))/12.566);
+    private double tickConstant = 79;
+    private double strafeConstant = 185;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -42,7 +38,7 @@ public class Auto_RedOutsidePark extends LinearOpMode{
         waitForStart();
         while (opModeIsActive()) {
             if (mode == 0) {
-                strafe(false, 0.8, 60);
+                strafe(true, 0.8, 12);
                 drive(false,0.5,48);
                 mode = 1;
                 telemetry.addData("Mode", "0");

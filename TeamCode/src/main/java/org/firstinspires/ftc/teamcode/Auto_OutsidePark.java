@@ -1,21 +1,16 @@
-//Red side, move foundation and park
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-
-@Autonomous(name="Blue Foundation/Park Outside", group="Blue")
-public class Auto_BlueFoundationParkOutside extends LinearOpMode{
+@Autonomous(name="Park Inside", group="Red")
+public class Auto_OutsidePark extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
-    private Servo foundationServo = null;
     private Servo clawServo = null;
-    private ElapsedTime runtime = new ElapsedTime();
     private double tickConstant = 79;
     private double strafeConstant = 185;
     @Override
@@ -25,8 +20,7 @@ public class Auto_BlueFoundationParkOutside extends LinearOpMode{
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         middleDrive = hardwareMap.get(DcMotor.class, "middle_drive");
-        foundationServo = hardwareMap.get(Servo.class, "foundation_servo" );
-        clawServo = hardwareMap.get(Servo.class,"claw_servo");
+        clawServo = hardwareMap.get(Servo.class, "claw_servo");
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
         middleDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -40,31 +34,18 @@ public class Auto_BlueFoundationParkOutside extends LinearOpMode{
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         int servoLocation = 0;
-        int mode = 0;
+        int mode = 1;
         waitForStart();
         while (opModeIsActive()) {
-            if (mode == 0){
-                foundationServo.setPosition(180);
-                strafe(false,0.8,18);
-                drive(false, 0.6, 23);
-                drive(false, 0.3, 7);
-                rackandpin(false);
-                drive(true,0.5,33);
-                rackandpin(true);
-                drive(false,0.3,1);
-                strafe(true,0.8,35);
-                //drive(false,0.8,21); //24 in
-                //drive(false,0.3,3);
-                strafe(true,0.8,23);
+            if (mode == 0) {
+                //strafe(true, 0.8, 12);
+                drive(false,0.5,48);
                 mode = 1;
                 telemetry.addData("Mode", "0");
                 telemetry.update();
             }
-            else {
-                telemetry.addData("Mode", "Done");
-                telemetry.update();
-            }
         }
+
     }
     private void strafe(boolean left, double speed, float distance){
         //12.566/1440 * in to give desired ticks
@@ -83,18 +64,6 @@ public class Auto_BlueFoundationParkOutside extends LinearOpMode{
         middleDrive.setPower(0);
         resetEncoders();
     }
-    private void rackandpin(boolean upward){
-      runtime.reset();
-      if(upward){
-          foundationServo.setPosition(180);
-      }else{
-          foundationServo.setPosition(0);
-      }
-      while (runtime.seconds() < 3) {
-          continue;
-      }
-    }
-
     private void drive(boolean forward, double speed, float distance){
         //12.566/1440 * in to give desired ticks
         int tickValue = (int)(tickConstant*distance);
@@ -128,6 +97,5 @@ public class Auto_BlueFoundationParkOutside extends LinearOpMode{
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
     }
 }
