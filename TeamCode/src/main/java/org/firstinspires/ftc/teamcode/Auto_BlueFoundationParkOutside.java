@@ -49,7 +49,7 @@ public class Auto_BlueFoundationParkOutside extends LinearOpMode{
                 drive(false, 0.6, 23);
                 drive(false, 0.3, 7);
                 rackandpin(false);
-                drive(true,0.5,33);
+                drive(true,0.5,31);
                 rackandpin(true);
                 drive(false,0.3,1);
                 strafe(true,0.8,35);
