@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name="Red Foundation/Park Inside", group="Red")
-public class Auto_RedFoundationParkInside extends LinearOpMode{
+public class Auto_BlueFoundationParkInside extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
@@ -45,7 +45,7 @@ public class Auto_RedFoundationParkInside extends LinearOpMode{
         while (opModeIsActive()) {
             if (mode == 0){
                 foundationServo.setPosition(180);
-                strafe(true,0.8,18);
+                strafe(false,0.8,18);
                 drive(false, 0.6, 23);
                 drive(false, 0.3, 7);
                 rackandpin(false);
@@ -53,10 +53,10 @@ public class Auto_RedFoundationParkInside extends LinearOpMode{
                 drive(true,0.5,3);
                 rackandpin(true);
                 drive(false,0.3,1);
-                strafe(false,0.8,35);
+                strafe(true,0.8,35);
                 drive(false,0.8,21); //24 in
                 drive(false,0.3,3);
-                strafe(false,0.8,23);
+                strafe(true,0.8,23);
                 mode = 1;
                 telemetry.addData("Mode", "0");
                 telemetry.update();

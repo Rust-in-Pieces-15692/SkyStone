@@ -51,10 +51,10 @@ public class Auto_RedFoundationParkOutside extends LinearOpMode{
                 rackandpin(false);
                 drive(true,0.5,33);
                 rackandpin(true);
+                drive(false,0.3,1);
                 strafe(false,0.8,35);
                 //drive(false,0.8,21); //24 in
                 //drive(false,0.3,3);
-                drive(true,0.3,1);
                 strafe(false,0.8,23);
                 mode = 1;
                 telemetry.addData("Mode", "0");

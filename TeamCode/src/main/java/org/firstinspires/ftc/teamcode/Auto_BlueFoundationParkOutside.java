@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="Red Foundation/Park Inside", group="Red")
-public class Auto_RedFoundationParkInside extends LinearOpMode{
+@Autonomous(name="Red Foundation/Park Outside", group="Red")
+public class Auto_BlueFoundationParkOutside extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor middleDrive = null;
@@ -45,18 +45,17 @@ public class Auto_RedFoundationParkInside extends LinearOpMode{
         while (opModeIsActive()) {
             if (mode == 0){
                 foundationServo.setPosition(180);
-                strafe(true,0.8,18);
+                strafe(false,0.8,18);
                 drive(false, 0.6, 23);
                 drive(false, 0.3, 7);
                 rackandpin(false);
-                drive(true,0.5,30); //33 in
-                drive(true,0.5,3);
+                drive(true,0.5,33);
                 rackandpin(true);
                 drive(false,0.3,1);
-                strafe(false,0.8,35);
-                drive(false,0.8,21); //24 in
-                drive(false,0.3,3);
-                strafe(false,0.8,23);
+                strafe(true,0.8,35);
+                //drive(false,0.8,21); //24 in
+                //drive(false,0.3,3);
+                strafe(true,0.8,23);
                 mode = 1;
                 telemetry.addData("Mode", "0");
                 telemetry.update();
@@ -85,15 +84,15 @@ public class Auto_RedFoundationParkInside extends LinearOpMode{
         resetEncoders();
     }
     private void rackandpin(boolean upward){
-        runtime.reset();
-        if(upward){
-            foundationServo.setPosition(180);
-        }else{
-            foundationServo.setPosition(0);
-        }
-        while (runtime.seconds() < 3) {
-            continue;
-        }
+      runtime.reset();
+      if(upward){
+          foundationServo.setPosition(180);
+      }else{
+          foundationServo.setPosition(0);
+      }
+      while (runtime.seconds() < 3) {
+          continue;
+      }
     }
 
     private void drive(boolean forward, double speed, float distance){
