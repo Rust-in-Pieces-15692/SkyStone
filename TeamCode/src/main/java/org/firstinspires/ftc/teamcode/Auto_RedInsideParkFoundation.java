@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="Red Park Inside Depo", group="Red")
+@Autonomous(name="Red Park Inside Foundation", group="Red")
 public class Auto_RedInsideParkFoundation extends LinearOpMode{
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
