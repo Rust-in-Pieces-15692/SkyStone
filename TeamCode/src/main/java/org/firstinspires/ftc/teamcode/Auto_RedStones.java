@@ -61,16 +61,19 @@ public class Auto_RedStones extends OpMode
         private PIDController PID = new PIDController();
     private ElapsedTime runtime = new ElapsedTime();
 
-    int currentXLocation = 0;
-    int currentYLocation = 0;
-    static int startingXLocation = 0;
-    static int startingYLocation = 0;
-    static int parkingXLocation = 0;
-    static int parkingYLocation = 0;
-    static int homeXLocation = 0;
-    static int homeYLocation = 0;
-    static int foundationXLocation = 0;
-    static int foundationYLocation = 0;
+    float currentXLocation = 0;
+    float currentYLocation = 0;
+    static float startingXLocation = 0;
+    static float startingYLocation = 0;
+    static float parkingXLocation = 0;
+    static float parkingYLocation = 0;
+    static float homeXLocation = 0;
+    static float homeYLocation = 0;
+    static float foundationXLocation = 0;
+    static float foundationYLocation = 0;
+
+    static float distanceYCoeff = 0;
+    static float distanceXCoeff = 0;
 
     private State currentState;
 
@@ -106,6 +109,8 @@ public class Auto_RedStones extends OpMode
      */
     @Override
     public void loop() {
+        telemetry.addData("Current Y Location", currentYLocation);
+        telemetry.addData("Current X Location", currentXLocation);
         if (runtime.seconds() > 25){
             setState(State.STATE_PARKING);
         }
@@ -173,8 +178,9 @@ public class Auto_RedStones extends OpMode
                 }
             case STATE_STOP:
                 stopAll();
-        }
 
+        }
+        telemetry.update();
     }
 
     /*
@@ -191,9 +197,11 @@ public class Auto_RedStones extends OpMode
 
     private void strafe(){
         //TODO: setup Strafe
+        currentXLocation = startingXLocation + (distanceXCoeff * middleDrive.getCurrentPosition());
     }
 
     private void drive(){
+        currentYLocation = startingYLocation + (distanceYCoeff / 2 * (leftDrive.getCurrentPosition()+rightDrive.getCurrentPosition()));
         float speed = PID.computePID();
         leftDrive.setPower(speed);
         rightDrive.setPower(speed);
@@ -201,8 +209,8 @@ public class Auto_RedStones extends OpMode
 
     private class PIDController{
         private ElapsedTime timePID = new ElapsedTime();
-        private int currentLocation;
-        private int goalLocation;
+        private float currentLocation;
+        private float goalLocation;
         private float currentError;
         private float currentTime;
         private float previousError;
@@ -212,7 +220,7 @@ public class Auto_RedStones extends OpMode
         private float kI;
         private float kD;
         public PIDController(){}
-        public void setPID(int currentLocation, int goalLocation){
+        public void setPID(float currentLocation, float goalLocation){
             this.currentLocation = currentLocation;
             this.goalLocation = goalLocation;
             if (currentTime == 0 && previousTime == 0){
@@ -249,12 +257,11 @@ public class Auto_RedStones extends OpMode
             this.previousError = currentError;
             this.previousTime = currentTime;
 
-            if (currentError < 0.5){
+            if (currentError == 0){
                 reset();
             }
-            telemetry.addData("Error", currentError);
-            telemetry.addData("Power", power);
-            telemetry.update();
+            telemetry.addData("[PID] Error", currentError);
+            telemetry.addData("[PID] Power", power);
             return power;
         }
     }
