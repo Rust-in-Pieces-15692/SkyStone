@@ -49,14 +49,24 @@ public class Auto_Red6Stones extends OpMode
         STATE_PROCESSING_STONE,
         STATE_NAVIGATING_TO_FOUNDATION,
         STATE_PLACING_BLOCK,
-        STATE_PARKING
+        STATE_PARKING,
+        STATE_STOP
     }
 
     private ElapsedTime runtime = new ElapsedTime();
+
     int currentXLocation = 0;
     int currentYLocation = 0;
+    static int startingXLocation = 0;
+    static int startingYLocation = 0;
+    static int parkingXLocation = 0;
+    static int parkingYLocation = 0;
     static int homeXLocation = 0;
-    static int homeYLocation
+    static int homeYLocation = 0;
+    static int foundationXLocation = 0;
+    static int foundationYLocation = 0;
+
+    private State currentState;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -79,6 +89,7 @@ public class Auto_Red6Stones extends OpMode
     @Override
     public void start() {
         runtime.reset();
+        setState(State.STATE_INITIAL);
     }
 
     /*
@@ -86,6 +97,73 @@ public class Auto_Red6Stones extends OpMode
      */
     @Override
     public void loop() {
+        if (runtime.seconds() > 25){
+            setState(State.STATE_PARKING);
+        }
+        switch (currentState){
+            case STATE_INITIAL:
+                setState(State.STATE_GOING_HOME);
+            case STATE_GOING_HOME:
+                if (currentXLocation == homeXLocation && currentYLocation == homeYLocation){
+                    if (1 == 1) { //TODO: add code to check for block
+                        setState(State.STATE_NAVIGATING_TO_FOUNDATION);
+                    }
+                    else {
+                        setState(State.STATE_NAVIGATING_QUARRY);
+                    }
+                }
+                else {
+                    //TODO: add code to navigate robot home, X first than Y
+                }
+            case STATE_NAVIGATING_QUARRY:
+                //TODO: Figure out how to determine necessary position
+            case STATE_INTAKING_STONE:
+                if (1 == 1) { //TODO: add color sensor code
+
+                }
+                else {
+                    //TODO: add intake spinning code
+                    //TODO: add slow drive forward
+                }
+            case STATE_PROCESSING_STONE:
+                if (1 == 1) { //TODO: add code for if skystone
+                    setState(State.STATE_GOING_HOME);
+                } else if (2 == 1){ //TODO: add code for if stone
+                    setState(State.STATE_INTAKING_STONE);
+                } else {
+                    //TODO: add code for positioning stone correctly
+                }
+            case STATE_NAVIGATING_TO_FOUNDATION:
+                if (currentXLocation == foundationXLocation && currentYLocation == foundationXLocation){
+                    setState(State.STATE_PLACING_BLOCK);
+                }
+                else {
+                    if (currentYLocation != foundationYLocation){
+                        //TODO: add Y drive
+                    }
+                    else {
+                        //TODO: add X drive
+                    }
+                }
+            case STATE_PLACING_BLOCK:
+                if (1 == 1){ //TODO: setup detecting if block is placed
+                    setState(State.STATE_GOING_HOME);
+                }
+                else {
+
+                }
+            case STATE_PARKING:
+                if (currentXLocation == parkingXLocation && currentYLocation == parkingYLocation){
+                    setState(State.STATE_STOP);
+                }
+                else {
+                    //TODO: add Y drive code
+                    //TODO: add X drive code
+                    //TODO: add lower arm code
+                }
+            case STATE_STOP:
+                stopAll();
+        }
 
     }
 
@@ -96,4 +174,19 @@ public class Auto_Red6Stones extends OpMode
     public void stop() {
     }
 
+    private void setState(State newState){
+        currentState = newState;
+    }
+
+    private void strafe(boolean moveLeft, float power){
+        //TODO: setup Strafe
+    }
+
+    private void drive(boolean driveForward, float power){
+        //TODO: setup drive
+    }
+    
+    private void stopAll(){
+        //TODO: Stop all the things
+    }
 }
