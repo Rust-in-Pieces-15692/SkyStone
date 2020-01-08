@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Dom's secret project", group="Crazy")
 @Disabled
-public class Auto_Red6Stones extends OpMode
+public class Auto_RedStones extends OpMode
 {
     // Declare OpMode members.
     private enum State {
@@ -185,7 +185,7 @@ public class Auto_Red6Stones extends OpMode
     private void drive(boolean driveForward, float power){
         //TODO: setup drive
     }
-    
+
     private void stopAll(){
         //TODO: Stop all the things
     }
