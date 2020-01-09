@@ -36,16 +36,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import org.firstinspires.ftc.teamcode.PIDController;
+import org.firstinspires.ftc.teamcode.Robot;
 
 @Autonomous(name="Dom's secret project", group="Crazy")
 @Disabled
 public class Auto_RedStones extends OpMode
 {
-    // Declare OpMode members.
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
-    private DcMotor middleDrive = null;
-
     //Declare states
     private enum State {
         STATE_INITIAL,
@@ -59,55 +56,37 @@ public class Auto_RedStones extends OpMode
         STATE_STOP
     }
 
+    private Robot robot = new Robot();
     private PIDController PID = new PIDController();
     private ElapsedTime runtime = new ElapsedTime();
-
-    float currentXLocation = 0;
-    float currentYLocation = 0;
-    static float startingXLocation = 0;
-    static float startingYLocation = 0;
-    static float parkingXLocation = 0;
-    static float parkingYLocation = 0;
-    static float homeXLocation = 0;
-    static float homeYLocation = 0;
-    static float foundationXLocation = 0;
-    static float foundationYLocation = 0;
-
-    static float distanceYCoeff = 0;
-    static float distanceXCoeff = 0;
-
     private State currentState;
 
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
+    private float currentXLocation = 0;
+    private float currentYLocation = 0;
+    private static float startingXLocation = 0;
+    private static float startingYLocation = 0;
+    private static float parkingXLocation = 0;
+    private static float parkingYLocation = 0;
+    private static float homeXLocation = 0;
+    private static float homeYLocation = 0;
+    private static float foundationXLocation = 0;
+    private static float foundationYLocation = 0;
+
+    private static float distanceYCoeff = 79;
+    private static float distanceXCoeff = 0;
+
     @Override
-    public void init() {
-        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        middleDrive = hardwareMap.get(DcMotor.class, "middle_drive");
+    public void init() {}
 
-    }
-
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
     @Override
-    public void init_loop() {
-    }
+    public void init_loop() {}
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
     @Override
     public void start() {
         runtime.reset();
         setState(State.STATE_INITIAL);
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
     @Override
     public void loop() {
         telemetry.addData("[Loop] Current Y Location", currentYLocation);
@@ -181,112 +160,40 @@ public class Auto_RedStones extends OpMode
                     setState(State.STATE_STOP);
                 }
                 else {
-                    //TODO: add Y drive code
-                    //TODO: add X drive code
+                    if (currentXLocation != homeXLocation){
+                        PID.setPID(currentXLocation, homeXLocation);
+                        strafe();
+                    }
+                    else {
+                        PID.setPID(currentYLocation, homeYLocation);
+                        drive();
+                    }
                     //TODO: add lower arm code
                 }
             case STATE_STOP:
-                stopAll();
+                robot.stopAll();
         }
         telemetry.update();
     }
 
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
     @Override
-    public void stop() {
-        stopAll();
-    }
+    public void stop() {}
 
-    private void setState(State newState){
-        currentState = newState;
-    }
+    private void setState(State newState){currentState = newState;}
 
     private void strafe(){
         //TODO: setup Strafe
-        currentXLocation = startingXLocation + (distanceXCoeff * middleDrive.getCurrentPosition());
+        currentXLocation = startingXLocation + (distanceXCoeff * robot.middleDrive.getCurrentPosition());
         PID.setStrafeConstants();
         float speed = PID.computePID();
-        middleDrive.setPower(speed);
+        robot.middleDrive.setPower(speed);
     }
 
     private void drive(){
-        currentYLocation = startingYLocation + (distanceYCoeff / 2 * (leftDrive.getCurrentPosition()+rightDrive.getCurrentPosition()));
+        currentYLocation = startingYLocation + (distanceYCoeff / 2 * (robot.leftDrive.getCurrentPosition()+robot.rightDrive.getCurrentPosition()));
         PID.setDriveConstants();
         float speed = PID.computePID();
-        leftDrive.setPower(speed);
-        rightDrive.setPower(speed);
-    }
-
-    private class PIDController{
-        private ElapsedTime timePID = new ElapsedTime();
-        private float currentLocation;
-        private float goalLocation;
-        private float currentError;
-        private float currentTime;
-        private float previousError;
-        private float previousTime;
-        private float iTerm = 0;
-        private float kP;
-        private float kI;
-        private float kD;
-        public PIDController(){}
-        public void setPID(float currentLocation, float goalLocation){
-            this.currentLocation = currentLocation;
-            this.goalLocation = goalLocation;
-            if (currentTime == 0 && previousTime == 0){
-                timePID.reset();
-            }
-        }
-        public void reset(){
-            this.currentLocation = 0;
-            this.goalLocation = 0;
-            this.currentError = 0;
-            this.previousError = 0;
-            this.currentTime = 0;
-            this.previousError = 0;
-            this.iTerm = 0;
-            timePID.reset();
-        }
-        public void setDriveConstants(){
-            //TODO: add drive PID constants
-            this.kP = kP;
-            this.kI = kI;
-            this.kD = kD;
-        }
-        public void setStrafeConstants(){
-            //TODO: add strafe PID constants
-            this.kP = kP;
-            this.kI = kI;
-            this.kD = kD;
-        }
-        public float computePID(){
-            this.currentTime = timePID.nanoseconds();
-            this.currentError = goalLocation - currentLocation;
-
-            float pTerm = kP * currentError;
-
-            iTerm = iTerm + (kI * (currentTime - previousTime));
-
-            float dTerm = kD * ((currentError - previousError)/(currentTime - previousTime));
-
-            float power = pTerm + iTerm + dTerm;
-
-            this.previousError = currentError;
-            this.previousTime = currentTime;
-
-            if (currentError == 0){
-                reset();
-            }
-
-            telemetry.addData("[PID] Error", currentError);
-            telemetry.addData("[PID] Power", power);
-            return power;
-        }
-    }
-
-    private void stopAll(){
-        //TODO: Stop all the things
+        robot.leftDrive.setPower(speed);
+        robot.rightDrive.setPower(speed);
     }
 }
