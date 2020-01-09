@@ -58,7 +58,8 @@ public class Auto_RedStones extends OpMode
         STATE_PARKING,
         STATE_STOP
     }
-        private PIDController PID = new PIDController();
+
+    private PIDController PID = new PIDController();
     private ElapsedTime runtime = new ElapsedTime();
 
     float currentXLocation = 0;
@@ -109,8 +110,8 @@ public class Auto_RedStones extends OpMode
      */
     @Override
     public void loop() {
-        telemetry.addData("Current Y Location", currentYLocation);
-        telemetry.addData("Current X Location", currentXLocation);
+        telemetry.addData("[Loop] Current Y Location", currentYLocation);
+        telemetry.addData("[Loop] Current X Location", currentXLocation);
         if (runtime.seconds() > 25){
             setState(State.STATE_PARKING);
         }
@@ -127,7 +128,14 @@ public class Auto_RedStones extends OpMode
                     }
                 }
                 else {
-                    //TODO: add code to navigate robot home, X first than Y
+                    if (currentXLocation != homeXLocation){
+                        PID.setPID(currentXLocation, homeXLocation);
+                        strafe();
+                    }
+                    else {
+                        PID.setPID(currentYLocation, homeYLocation);
+                        drive();
+                    }
                 }
             case STATE_NAVIGATING_QUARRY:
                 //TODO: Figure out how to determine necessary position
@@ -157,7 +165,8 @@ public class Auto_RedStones extends OpMode
                         drive();
                     }
                     else {
-                        //TODO: add X drive
+                        PID.setPID(currentXLocation, foundationXLocation);
+                        strafe();
                     }
                 }
             case STATE_PLACING_BLOCK:
@@ -178,7 +187,6 @@ public class Auto_RedStones extends OpMode
                 }
             case STATE_STOP:
                 stopAll();
-
         }
         telemetry.update();
     }
@@ -188,7 +196,7 @@ public class Auto_RedStones extends OpMode
      */
     @Override
     public void stop() {
-
+        stopAll();
     }
 
     private void setState(State newState){
@@ -198,10 +206,14 @@ public class Auto_RedStones extends OpMode
     private void strafe(){
         //TODO: setup Strafe
         currentXLocation = startingXLocation + (distanceXCoeff * middleDrive.getCurrentPosition());
+        PID.setStrafeConstants();
+        float speed = PID.computePID();
+        middleDrive.setPower(speed);
     }
 
     private void drive(){
         currentYLocation = startingYLocation + (distanceYCoeff / 2 * (leftDrive.getCurrentPosition()+rightDrive.getCurrentPosition()));
+        PID.setDriveConstants();
         float speed = PID.computePID();
         leftDrive.setPower(speed);
         rightDrive.setPower(speed);
@@ -237,7 +249,14 @@ public class Auto_RedStones extends OpMode
             this.iTerm = 0;
             timePID.reset();
         }
-        public void setPIDconstants(float kP, float kI, float kD){
+        public void setDriveConstants(){
+            //TODO: add drive PID constants
+            this.kP = kP;
+            this.kI = kI;
+            this.kD = kD;
+        }
+        public void setStrafeConstants(){
+            //TODO: add strafe PID constants
             this.kP = kP;
             this.kI = kI;
             this.kD = kD;
@@ -260,6 +279,7 @@ public class Auto_RedStones extends OpMode
             if (currentError == 0){
                 reset();
             }
+
             telemetry.addData("[PID] Error", currentError);
             telemetry.addData("[PID] Power", power);
             return power;
