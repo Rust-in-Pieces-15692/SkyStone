@@ -7,21 +7,25 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Robot extends OpMode{
+public class Robot{
     // Declare parts of the robot members.
-    public DcMotor leftDrive = null;
-    public DcMotor rightDrive = null;
-    public DcMotor middleDrive = null;
+    public DcMotor leftDrive;
+    public DcMotor rightDrive;
+    public DcMotor middleDrive;
 
-    public void init() {
-        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        middleDrive = hardwareMap.get(DcMotor.class, "middle_drive");
+    HardwareMap hardwareMap;
 
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        middleDrive.setDirection(DcMotor.Direction.FORWARD);
+    public void initRobot(HardwareMap ahwmap) {
+        this.hardwareMap = ahwmap;
+        this.leftDrive = this.hardwareMap.get(DcMotor.class, "left_drive");
+        this.rightDrive = this.hardwareMap.get(DcMotor.class, "right_drive");
+        this.middleDrive = this.hardwareMap.get(DcMotor.class, "middle_drive");
+
+        this.leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        this.rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        this.middleDrive.setDirection(DcMotor.Direction.FORWARD);
     }
 
     public void loop(){}

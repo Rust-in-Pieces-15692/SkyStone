@@ -17,10 +17,10 @@ public class PIDController {
     private float currentTime;
     private float previousError;
     private float previousTime;
-    private float iTerm = 0;
-    private float kP;
-    private float kI;
-    private float kD;
+    private double iTerm = 0;
+    private double kP;
+    private double kI;
+    private double kD;
     public PIDController(){}
     public void setPID(float currentLocation, float goalLocation){
         this.currentLocation = currentLocation;
@@ -51,23 +51,23 @@ public class PIDController {
         this.kI = kI;
         this.kD = kD;
     }
-    public void setCustomConstants(float kP, float kI, float kD){
+    public void setCustomConstants(double kP, double kI, double kD){
         //TODO: add strafe PID constants
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
     }
-    public float computePID(){
+    public double computePID(){
         this.currentTime = timePID.nanoseconds();
         this.currentError = goalLocation - currentLocation;
 
-        float pTerm = kP * currentError;
+        double pTerm = kP * currentError;
 
         iTerm = iTerm + (kI * (currentTime - previousTime));
 
-        float dTerm = kD * ((currentError - previousError)/(currentTime - previousTime));
+        double dTerm = kD * ((currentError - previousError)/(currentTime - previousTime));
 
-        float power = pTerm + iTerm + dTerm;
+        double power = pTerm + iTerm + dTerm;
 
         this.previousError = currentError;
         this.previousTime = currentTime;

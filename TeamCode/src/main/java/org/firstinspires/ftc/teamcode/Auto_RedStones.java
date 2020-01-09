@@ -185,14 +185,14 @@ public class Auto_RedStones extends OpMode
         //TODO: setup Strafe
         currentXLocation = startingXLocation + (distanceXCoeff * robot.middleDrive.getCurrentPosition());
         PID.setStrafeConstants();
-        float speed = PID.computePID();
+        double speed = PID.computePID();
         robot.middleDrive.setPower(speed);
     }
 
     private void drive(){
         currentYLocation = startingYLocation + (distanceYCoeff / 2 * (robot.leftDrive.getCurrentPosition()+robot.rightDrive.getCurrentPosition()));
         PID.setDriveConstants();
-        float speed = PID.computePID();
+        double speed = PID.computePID();
         robot.leftDrive.setPower(speed);
         robot.rightDrive.setPower(speed);
     }
