@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Robot;
 
-@Autonomous(name="Red Park Outsid ", group="Red")
-public class Auto_RedOutsidePark extends LinearOpMode{
+@Autonomous(name="Red Park Outside ", group="Red")
+public class RedOutsidePark extends LinearOpMode{
    private Robot robot = new Robot();
    @Override
    public void runOpMode() {
