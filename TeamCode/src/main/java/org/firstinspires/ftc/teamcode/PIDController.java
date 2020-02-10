@@ -41,9 +41,9 @@ public class PIDController {
     }
     public void setDriveConstants(){
         //TODO: add drive PID constants
-        this.kP = kP;
-        this.kI = kI;
-        this.kD = kD;
+        this.kP = 0.61;
+        this.kI = 0;
+        this.kD = 0;
     }
     public void setStrafeConstants(){
         //TODO: add strafe PID constants
@@ -58,14 +58,14 @@ public class PIDController {
         this.kD = kD;
     }
     public double computePID(){
-        this.currentTime = timePID.nanoseconds();
-        this.currentError = goalLocation - currentLocation;
+        currentTime = timePID.nanoseconds();
+        currentError = goalLocation - currentLocation;
 
         double pTerm = kP * currentError;
 
-        iTerm = iTerm + (kI * (currentTime - previousTime));
+        this.iTerm = iTerm + (kI * (currentTime - this.previousTime));
 
-        double dTerm = kD * ((currentError - previousError)/(currentTime - previousTime));
+        double dTerm = kD * ((currentError - this.previousError)/(currentTime - this.previousTime));
 
         double power = pTerm + iTerm + dTerm;
 

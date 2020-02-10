@@ -182,7 +182,6 @@ public class Auto_RedStones extends OpMode
     private void setState(State newState){currentState = newState;}
 
     private void strafe(){
-        //TODO: setup Strafe
         currentXLocation = startingXLocation + (distanceXCoeff * robot.middleDrive.getCurrentPosition());
         PID.setStrafeConstants();
         double speed = PID.computePID();

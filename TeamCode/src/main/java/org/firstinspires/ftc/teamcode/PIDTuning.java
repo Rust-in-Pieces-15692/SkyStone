@@ -16,11 +16,12 @@ public class PIDTuning extends LinearOpMode {
 
     private PIDController PID = new PIDController();
 
-    private int goalLocation = 1896; //24 inches
+    private float goalLocation = 1896/79; //24 inches
+    private float currentLocation = 0;
 
-    double pConstant = 0.1;
-    double iConstant = 0.1;
-    double dConstant = 0.1;
+    double pConstant = 0.95;
+    double iConstant = 0.0;
+    double dConstant = 0.0;
 
     double power = 0;
 
@@ -31,30 +32,49 @@ public class PIDTuning extends LinearOpMode {
     boolean dLeft = false;
     boolean dRight = false;
 
+    boolean started = false;
+    boolean instructions = true;
     public void runOpMode(){
         robot.initRobot(hardwareMap);
         waitForStart();
         while (opModeIsActive()){
-            telemetry.addData("P term control", "A +, B -");
-            telemetry.addData("I term control", "Right +, Left -");
-            telemetry.addData("D term control", "Up +, Down -");
-            telemetry.addData("Run Test", "Hold both Bumpers");
-            telemetry.addData("Reset Encoders", "Left or Right Stick Button");
-            telemetry.addLine(" ");
-            telemetry.addData("Current Encoder Average", (robot.leftDrive.getCurrentPosition() + robot.rightDrive.getCurrentPosition()) / 2);
+            currentLocation = (robot.leftDrive.getCurrentPosition() + robot.rightDrive.getCurrentPosition()) / 2 / 79;
+            if (instructions) {
+                telemetry.addData("P term control", "A +, B -");
+                telemetry.addData("I term control", "Right +, Left -");
+                telemetry.addData("D term control", "Up +, Down -");
+                telemetry.addData("Run Test", "Left bumper");
+                telemetry.addData("Stop Test", "Right bumper");
+                telemetry.addData("Reset Encoders", "Left or Right Stick Button");
+                telemetry.addLine(" ");
+            }
+            telemetry.addData("Current Encoder Average", currentLocation);
             telemetry.addData("Goal Encoder Location", goalLocation);
             telemetry.addLine(" ");
             telemetry.addData("P term", pConstant);
             telemetry.addData("I term", iConstant);
             telemetry.addData("D term", dConstant);
             telemetry.addLine(" ");
-        if (gamepad1.left_bumper && gamepad1.right_bumper) {
-                PID.setCustomConstants(pConstant, dConstant, iConstant);
-                PID.setPID((robot.leftDrive.getCurrentPosition() + robot.rightDrive.getCurrentPosition()) / 2, goalLocation);
-                power = PID.computePID();
-                telemetry.addData("[PID] Power", power);
-                robot.leftDrive.setPower(power);
-                robot.rightDrive.setPower(power);
+            telemetry.addData("[PID] Power", power);
+            telemetry.addData("[PID] Running", started);
+            if (gamepad1.left_bumper) {
+                started = true;
+            } else if (gamepad1.right_bumper){
+                started = false;
+                robot.stopAll();
+            }
+            if (started) {
+                if (goalLocation != currentLocation) {
+                    PID.setCustomConstants(pConstant, dConstant, iConstant);
+                    PID.setPID(currentLocation, goalLocation);
+                    power = PID.computePID();
+                    robot.leftDrive.setPower(power);
+                    robot.rightDrive.setPower(power);
+                } else {
+                    power = 0;
+                    robot.leftDrive.setPower(power);
+                    robot.rightDrive.setPower(power);
+                }
             }
             if (!aPressed && gamepad1.a){
                 aPressed = true;
@@ -88,7 +108,7 @@ public class PIDTuning extends LinearOpMode {
             }
             if (!dLeft && gamepad1.dpad_left){
                 dLeft = true;
-                dConstant -= 0.01;
+                iConstant -= 0.01;
             } else if (dLeft && !gamepad1.dpad_left){
                 dLeft = false;
             }
