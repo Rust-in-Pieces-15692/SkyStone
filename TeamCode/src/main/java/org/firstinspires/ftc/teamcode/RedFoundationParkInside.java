@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Robot;
 
-@Autonomous(name="Red Foundation Park Outside ", group="Red")
-public class RedFoundationParkOutside extends LinearOpMode{
+@Autonomous(name="Red Foundation Park Inside ", group="Red")
+public class RedFoundationParkInside extends LinearOpMode{
     private Robot robot = new Robot();
     @Override
     public void runOpMode() {
@@ -40,13 +40,18 @@ public class RedFoundationParkOutside extends LinearOpMode{
                 state = 6;
                 break;
             case 6:
-                robot.stopAll();
+                robot.drive(14);
                 state = 7;
                 break;
             case 7:
+                robot.stopAll();
+                state = 8;
+                break;
+            case 8:
                 break;
 
 
         }
     }
 }
+
