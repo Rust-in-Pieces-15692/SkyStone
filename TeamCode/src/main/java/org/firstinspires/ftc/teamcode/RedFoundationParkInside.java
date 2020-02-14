@@ -16,7 +16,7 @@ public class RedFoundationParkInside extends LinearOpMode{
         int state = 0;
         switch (state) {
             case 0:
-                robot.strafe(48);
+                robot.strafe(16);
                 state = 1;
                 break;
             case 1:
@@ -28,7 +28,7 @@ public class RedFoundationParkInside extends LinearOpMode{
                 state = 3;
                 break;
             case 3:
-                robot.drive(-12);
+                robot.drive(-10);
                 state = 4;
                 break;
             case 4:
@@ -36,11 +36,11 @@ public class RedFoundationParkInside extends LinearOpMode{
                 state = 5;
                 break;
             case 5:
-                robot.strafe(-48);
+                robot.strafe(-51);
                 state = 6;
                 break;
             case 6:
-                robot.drive(14);
+                robot.drive(20);
                 state = 7;
                 break;
             case 7:
