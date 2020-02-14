@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -36,12 +37,13 @@ public class Robot{
         this.foundationLeft = this.hardwareMap.get(Servo.class, "foundationLeft");
         this.foundationRight = this.hardwareMap.get(Servo.class, "foundationRight");
 
-        this.leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        this.rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        this.leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        this.rightDrive.setDirection(DcMotor.Direction.REVERSE);
         this.middleDrive.setDirection(DcMotor.Direction.FORWARD);
         this.lift.setDirection(DcMotor.Direction.FORWARD);
 
         this.lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        resetEncoders();
     }
 
     public void stopAll(){
@@ -55,6 +57,9 @@ public class Robot{
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         middleDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setTargetPosition(0);
+        rightDrive.setTargetPosition(0);
+        middleDrive.setTargetPosition(0);
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         middleDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
