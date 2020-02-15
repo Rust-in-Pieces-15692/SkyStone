@@ -93,8 +93,8 @@ public class Robot{
         int tickValue = (int)(tickConstant*inches)(9)(degrees*(180/Math.Pi));
         leftDrive.setTargetPosition(tickValue);
         rightDrive.setTargetPosition(-tickValue);
-        leftDrive.setPower(0.8);
-        rightDrive.setPower(0.8);
+        leftDrive.setPower(0.6);
+        rightDrive.setPower(0.6);
         while (leftDrive.isBusy() && rightDrive.isBusy()){}
         leftDrive.setPower(0);
         rightDrive.setPower(0);
@@ -105,8 +105,8 @@ public class Robot{
         int tickValue = (int)(tickConstant*inches);
         leftDrive.setTargetPosition(tickValue);
         rightDrive.setTargetPosition(tickValue);
-        leftDrive.setPower(0.8);
-        rightDrive.setPower(0.8);
+        leftDrive.setPower(0.6);
+        rightDrive.setPower(0.6);
         while (leftDrive.isBusy() && rightDrive.isBusy()){}
         leftDrive.setPower(0);
         rightDrive.setPower(0);
@@ -115,7 +115,7 @@ public class Robot{
     public void strafe(int inches){
         int tickValue = (int)(strafeConstant*inches);
         middleDrive.setTargetPosition(tickValue);
-        rightDrive.setPower(.8);
+        rightDrive.setPower(0.8);
         while (middleDrive.isBusy()){}
         middleDrive.setPower(0);
         resetEncoders();
