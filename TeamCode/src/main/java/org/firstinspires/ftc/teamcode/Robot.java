@@ -90,7 +90,15 @@ public class Robot{
     }
 
     public void turn(int degrees){
-        //TODO: TURNING CODE
+        int tickValue = (int)(tickConstant*inches)(9)(degrees*(180/Math.Pi));
+        leftDrive.setTargetPosition(tickValue);
+        rightDrive.setTargetPosition(-tickValue);
+        leftDrive.setPower(0.8);
+        rightDrive.setPower(0.8);
+        while (leftDrive.isBusy() && rightDrive.isBusy()){}
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+        resetEncoders();
     }
 
     public void drive(int inches){
