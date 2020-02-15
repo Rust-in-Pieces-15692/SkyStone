@@ -20,10 +20,11 @@ public class BlueFoundationParkInside extends LinearOpMode{
                 state = 1;
                 break;
             case 1:
-                robot.drive(12);
+                robot.drive(11);
                 state = 2;
                 break;
             case 2:
+                robot.drive(1);
                 robot.foundationGrab(1);
                 state = 3;
                 break;
@@ -33,6 +34,7 @@ public class BlueFoundationParkInside extends LinearOpMode{
                 break;
             case 4:
                 robot.foundationGrab(0);
+                robot.drive(1);
                 state = 5;
                 break;
             case 5:
